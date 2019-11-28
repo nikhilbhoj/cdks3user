@@ -1,0 +1,175 @@
+IR DevOps Test
+Question 1:
+We need to give access to an AWS IAM user where the IAM user can access S3 console, list
+buckets, list objects, view bucket policies etc, basically all read operations except that the
+user should not be able to download objects.
+Create an AWS CloudFormation stack that demonstrate following items:
+ An IAM user creation.
+ It should be possible to pass the IAM user name as a parameter.
+ An IAM policy applicable to the IAM user that accomplishes above mentioned
+requirements.
+Make sure to run the CloudFormation stack you create in an AWS account and test
+that it satisfies the conditions mentioned in this question. After testing, send us the
+stack you created.
+It would be a plus if you can create above CloudFormation stack via the Serverless
+Framework (https://serverless.com/).
+
+Done
+Done in CDK too.
+
+Question 2:
+You need to architect an automated CICD pipeline from scratch. The requirements are:
+1. Code will be stored in GitHub
+2. You will need to deploy to AWS.
+3. There are 3 AWS accounts matching the stages (Development, Staging, Production)
+4. The product being developed is a serverless web application (S3, Lambda,
+DynamoDB)
+5. 4 teams will be working on the same product at the same time
+Please describe how you would architect the pipeline:
+ What tools you would use to automate the pipeline?
+ What operational polices you would you enforce (think ITIL not IAM) to maximize flow
+but keep the auditors away?
+ What would be the processes to promote changes through the stages to production
+with minimal impact on the user?
+ What would be the key metrics to monitor?
+
+Question 3:
+As part of our Quality Assurance, we need 3 versions of Windows and 2 versions of Linux to
+test our product.
+We need to create new VMs and install the multiple prerequisite packages every time we run
+the tests.
+
+What would be the best way to automate this process?
+(There is no one correct answer - please give as much detail as you can)
+
+Option 1:
+
+Using Packer from Hasicorp to bake AWS AMI (AWS machine image) with the required packages, which can be 
+automated as part of pipeline stage or as a job that will tag the image with a tag key as recent:"true"
+for the  the product to use.
+
+This is how our platform team give us the secured AMI which is security approved to the AWS tenants. 
+
+Option 2:
+We can use AWS Systems Manager Automation to  automate creation of EC2 instance based on the required 
+packages for 3 versions of Windows and 2 versions of Linux for our product.
+The advantage of this approach is that System manager also take care of automated patching 
+
+Source: https://aws.amazon.com/blogs/aws/streamline-ami-maintenance-and-patching-using-amazon-ec2-systems-manager-automation/
+
+
+Option 3: 
+When we are lauching these  3 versions of Windows and 2 versions , in the User data we can run command
+to install all the required packages.
+
+
+Question 4:
+Evil Corp has a global presence offering services in the US, Europe, South Africa,
+Singapore, China and Australia. A market leader cheap in the health and payments services,
+Evil is used by customers of all sizes, some spanning the globe.
+You have been asked to review the operations processes of Evil and make
+recommendations.
+Please:
+ Describe your approach
+ Concerns
+Management has given you 6 months to improve operations by 50% against your findings.
+Please outline a plan of action.
+
+
+Question 5:
+On a scale of 0-10, how do you rate your knowledge in the following services?
+0: No knowledge. 10: Indepth knowledge.
+ AWS CloudFormation : 8
+ AWS IAM : 8
+ AWS S3 : 8
+ AWS Lambda : 8
+ AWS API Gatway : 6
+ AWS DynamoDB : 6
+ AWS VPC, EC2s : 7
+ AWS Route53 : 6
+ AWS Kinesis : 7
+ AWS IOT : 2
+ AWS ElasticeSearch : 4
+ AWS CloudWatch : 8
+ AWS Cognito : 5
+ AWS SNS, SQS : 6
+ AWS RDS : 7
+ AWS Cloud Security : 7
+ Docker : 7
+ Kubernetes : 7
+ Jenkins : 5
+ Ansible : 0
+ Java : 8
+ NodeJs : 6
+ C++ : 6
+ Groovy : 7
+ Microservice : 7
+ SOA, ESB : 5
+
+resources:
+  Resources:
+    customRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: ServerlessFrameworkRole
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: ServerlessPolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+              - Sid: AllowIAMForLambdaPolicy
+                Effect: Allow
+                Action:
+                - iam:GetGroup
+                - iam:ListUsers
+                - iam:AddUserToGroup
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+                Resource: "*"
+
+
+
+        's3:GetAccelerateConfiguration'
+        's3:GetAccountPublicAccessBlock'
+        's3:GetAnalyticsConfiguration'
+        's3:GetBucketAcl'
+        's3:GetBucketCORS'
+        's3:GetBucketLocation'
+        's3:GetBucketLogging'
+        's3:GetBucketNotification'
+        's3:GetBucketPolicy'
+        's3:GetBucketPolicyStatus'
+        's3:GetBucketPublicAccessBlock'
+        's3:GetBucketRequestPayment'
+        's3:GetBucketTagging'
+        's3:GetBucketVersioning'
+        's3:GetBucketWebsite'
+        's3:GetEncryptionConfiguration'
+        's3:GetInventoryConfiguration'
+        's3:GetLifecycleConfiguration'
+        's3:GetMetricsConfiguration'
+        's3:GetObject'
+        's3:GetObjectAcl'
+        's3:GetObjectTagging'
+        's3:GetObjectTorrent'
+        's3:GetObjectVersion'
+        's3:GetObjectVersionAcl'
+        's3:GetObjectVersionForReplication'
+        's3:GetObjectVersionTagging'
+        's3:GetObjectVersionTorrent'
+        's3:GetReplicationConfiguration'
+        's3:ListBucket'
+        's3:ListBucketByTags'
+        's3:ListBucketMultipartUploads'
+        's3:ListBucketVersions'
+        's3:ListJobs'
+        's3:ListMultipartUploadParts'
